@@ -11,6 +11,7 @@ import {
   FileCheck,
   Printer,
   Home,
+  ArrowLeft,
   ShieldCheck,
   User,
   Phone,
@@ -68,6 +69,7 @@ export const StudentRegistrationView: React.FC = () => {
     college: '',
     duration: '',
     passingYear: '',
+    endDate: '',
     placement: 'Job + Internship',
     email: '',
     phone: '',
@@ -92,6 +94,8 @@ export const StudentRegistrationView: React.FC = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedRegistration, setSubmittedRegistration] = useState<StudentRegistration | null>(null);
+  const [isStartDateFocused, setIsStartDateFocused] = useState(false);
+  const [isEndDateFocused, setIsEndDateFocused] = useState(false);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -185,6 +189,7 @@ export const StudentRegistrationView: React.FC = () => {
           college: formData.college.trim(),
           duration: formData.duration || undefined,
           passingYear: formData.passingYear,
+          endDate: formData.endDate || undefined,
           placement: formData.placement,
           email: formData.email.trim() || undefined,
           phone: formData.phone.trim() || undefined,
@@ -212,6 +217,7 @@ export const StudentRegistrationView: React.FC = () => {
       college: '',
       duration: '',
       passingYear: '',
+      endDate: '',
       placement: 'Job + Internship',
       email: '',
       phone: '',
@@ -786,10 +792,21 @@ export const StudentRegistrationView: React.FC = () => {
           /* =====================================================================
               PRIMARY REGISTRATION EXPERIENCE
               ===================================================================== */
-          <div className="space-y-5 sm:space-y-6">
+          <div className="relative space-y-5 sm:space-y-6">
+
+            {/* Back to Home Small Arrow */}
+            <button
+              type="button"
+              onClick={() => navigateTo('home')}
+              title="Back to Home"
+              aria-label="Back to Home"
+              className="absolute top-0 left-0 inline-flex items-center justify-center w-8 h-8 rounded-lg bg-white border border-[#E2E8F0] text-[#071B49] hover:text-[#146EF5] hover:border-[#146EF5]/50 hover:bg-[#F0F6FF] shadow-xs transition-all cursor-pointer"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </button>
 
             {/* TOP HEADLINE */}
-            <div className="text-center max-w-3xl mx-auto px-2">
+            <div className="text-center max-w-3xl mx-auto px-10 !mt-0">
               <h1 className="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight leading-tight">
                 <span className="text-[#071B49]">One Registration </span>
                 <span className="text-[#146EF5]">Many Opportunities</span>
@@ -965,11 +982,21 @@ export const StudentRegistrationView: React.FC = () => {
                       }`}>
                         <input
                           id="reg-passing-year"
-                          type="date"
+                          type={isStartDateFocused || formData.passingYear ? 'date' : 'text'}
                           value={formData.passingYear}
+                          onFocus={(e) => {
+                            setIsStartDateFocused(true);
+                            e.currentTarget.type = 'date';
+                            try {
+                              e.currentTarget.showPicker?.();
+                            } catch {
+                              // Ignore if browser restricts programmatic showPicker
+                            }
+                          }}
+                          onBlur={() => setIsStartDateFocused(false)}
                           onChange={(e) => handleInputChange('passingYear', e.target.value)}
-                          placeholder="Graduation Date *"
-                          className="w-full h-full bg-transparent text-xs sm:text-[13px] font-medium text-[#071B49] focus:outline-none cursor-pointer pr-6"
+                          placeholder="Start Date"
+                          className="w-full h-full bg-transparent text-xs sm:text-[13px] font-medium text-[#071B49] placeholder:text-slate-400 focus:outline-none cursor-pointer pr-6"
                         />
                         <Calendar className="w-3.5 h-3.5 text-[#146EF5] absolute right-3 pointer-events-none shrink-0" />
                       </div>
@@ -980,33 +1007,41 @@ export const StudentRegistrationView: React.FC = () => {
                       )}
                     </div>
 
-                    {/* 6. Placement Type (Clean Segmented Pill Box, 38-40px height) */}
+                    {/* End Date */}
                     <div>
-                      <div className="h-[38px] sm:h-[40px] bg-[#F4F8FF] border border-[#E2E8F0] rounded-[6px] p-0.5 flex items-center gap-1">
-                        {placementOptions.map((opt) => {
-                          const isSelected = formData.placement === opt;
-                          return (
-                            <button
-                              key={opt}
-                              type="button"
-                              onClick={() => handleInputChange('placement', opt)}
-                              className={`flex-1 h-full rounded-[4px] text-[11px] sm:text-xs font-bold transition-all cursor-pointer flex items-center justify-center text-center px-1 select-none ${
-                                isSelected
-                                  ? 'bg-[#146EF5] text-white shadow-xs'
-                                  : 'text-slate-600 hover:text-[#071B49] hover:bg-white/60'
-                              }`}
-                            >
-                              {opt}
-                            </button>
-                          );
-                        })}
+                      <div className={`relative flex items-center h-[38px] sm:h-[40px] bg-white border rounded-[6px] transition-all px-3 ${
+                        errors.endDate
+                          ? 'border-red-400 ring-2 ring-red-100'
+                          : 'border-[#E2E8F0] hover:border-[#146EF5]/50 focus-within:border-[#146EF5] focus-within:ring-2 focus-within:ring-[#146EF5]/10'
+                      }`}>
+                        <input
+                          id="reg-end-date"
+                          type={isEndDateFocused || formData.endDate ? 'date' : 'text'}
+                          value={formData.endDate}
+                          onFocus={(e) => {
+                            setIsEndDateFocused(true);
+                            e.currentTarget.type = 'date';
+                            try {
+                              e.currentTarget.showPicker?.();
+                            } catch {
+                              // Ignore if browser restricts programmatic showPicker
+                            }
+                          }}
+                          onBlur={() => setIsEndDateFocused(false)}
+                          onChange={(e) => handleInputChange('endDate', e.target.value)}
+                          placeholder="End Date"
+                          className="w-full h-full bg-transparent text-xs sm:text-[13px] font-medium text-[#071B49] placeholder:text-slate-400 focus:outline-none cursor-pointer pr-6"
+                        />
+                        <Calendar className="w-3.5 h-3.5 text-[#146EF5] absolute right-3 pointer-events-none shrink-0" />
                       </div>
-                      {errors.placement && (
+                      {errors.endDate && (
                         <p className="text-[10px] text-red-500 mt-1 px-1 flex items-center gap-1 font-medium">
-                          <AlertCircle className="w-2.5 h-2.5" /> {errors.placement}
+                          <AlertCircle className="w-2.5 h-2.5" /> {errors.endDate}
                         </p>
                       )}
                     </div>
+
+
 
                     {/* 7. Email Address */}
                     <div>
@@ -1041,169 +1076,7 @@ export const StudentRegistrationView: React.FC = () => {
                   </div>
                 </div>
 
-                {/* =====================================================================
-                    SECTION 2: DOCUMENT UPLOAD INPUTS (COMPACT 38-40PX HEIGHT)
-                    ===================================================================== */}
-                <div className="space-y-3.5 pt-0.5">
-                  
-                  {/* Section Title Strip */}
-                  <div className="bg-[#F0F6FF] border border-[#D8E8FF] rounded-[6px] px-3.5 py-2 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-md bg-[#146EF5] text-white flex items-center justify-center shadow-xs shrink-0">
-                        <Paperclip className="w-3 h-3" />
-                      </div>
-                      <h2 className="text-xs sm:text-sm font-black text-[#071B49]">
-                        2. Documents & Resume
-                      </h2>
-                    </div>
-                  </div>
 
-                  {/* Upload Fields in 3-Column Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 pt-0.5">
-
-                    {/* Doc 1: Resume / CV */}
-                    <div>
-                      {resumeFile ? (
-                        <div className="relative flex items-center justify-between h-[38px] sm:h-[40px] bg-blue-50/70 border border-[#146EF5] rounded-[6px] px-3">
-                          <div className="flex items-center gap-1.5 min-w-0 flex-1 pr-1">
-                            <FileText className="w-3.5 h-3.5 text-[#146EF5] shrink-0" />
-                            <div className="truncate">
-                              <span className="text-[11px] font-bold text-[#071B49] block truncate">{resumeFile.name}</span>
-                              <span className="text-[9px] text-slate-500 font-medium">{formatFileSize(resumeFile.size)}</span>
-                            </div>
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => setResumeFile(null)}
-                            className="w-5 h-5 rounded-full bg-white hover:bg-red-50 text-slate-400 hover:text-red-500 flex items-center justify-center transition-colors cursor-pointer border border-slate-200 shrink-0"
-                            title="Remove file"
-                          >
-                            <X className="w-2.5 h-2.5" />
-                          </button>
-                        </div>
-                      ) : (
-                        <div
-                          onClick={() => resumeInputRef.current?.click()}
-                          className="relative flex items-center justify-between h-[38px] sm:h-[40px] bg-white border border-[#E2E8F0] hover:border-[#146EF5] rounded-[6px] px-3 cursor-pointer transition-all hover:bg-blue-50/20 group"
-                        >
-                          <div className="flex items-center gap-1.5 truncate pr-1">
-                            <FileText className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#146EF5] transition-colors shrink-0" />
-                            <span className="text-[11px] sm:text-xs font-medium text-slate-600 group-hover:text-[#071B49] transition-colors truncate">
-                              Upload Resume / CV
-                            </span>
-                          </div>
-                          <UploadCloud className="w-3.5 h-3.5 text-[#146EF5] shrink-0" />
-                        </div>
-                      )}
-                      <input
-                        ref={resumeInputRef}
-                        type="file"
-                        accept=".pdf,.doc,.docx"
-                        className="hidden"
-                        onChange={(e) => {
-                          if (e.target.files && e.target.files[0]) {
-                            processFileUpload(e.target.files[0], setResumeFile, 'Resume / CV', 5);
-                          }
-                        }}
-                      />
-                    </div>
-
-                    {/* Doc 2: Aadhaar Card / ID Proof */}
-                    <div>
-                      {idCardFile ? (
-                        <div className="relative flex items-center justify-between h-[38px] sm:h-[40px] bg-emerald-50/70 border border-emerald-500 rounded-[6px] px-3">
-                          <div className="flex items-center gap-1.5 min-w-0 flex-1 pr-1">
-                            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                            <div className="truncate">
-                              <span className="text-[11px] font-bold text-slate-900 block truncate">{idCardFile.name}</span>
-                              <span className="text-[9px] text-slate-500 font-medium">{formatFileSize(idCardFile.size)}</span>
-                            </div>
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => setIdCardFile(null)}
-                            className="w-5 h-5 rounded-full bg-white hover:bg-red-50 text-slate-400 hover:text-red-500 flex items-center justify-center transition-colors cursor-pointer border border-slate-200 shrink-0"
-                            title="Remove file"
-                          >
-                            <X className="w-2.5 h-2.5" />
-                          </button>
-                        </div>
-                      ) : (
-                        <div
-                          onClick={() => idCardInputRef.current?.click()}
-                          className="relative flex items-center justify-between h-[38px] sm:h-[40px] bg-white border border-[#E2E8F0] hover:border-[#146EF5] rounded-[6px] px-3 cursor-pointer transition-all hover:bg-blue-50/20 group"
-                        >
-                          <div className="flex items-center gap-1.5 truncate pr-1">
-                            <ShieldCheck className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#146EF5] transition-colors shrink-0" />
-                            <span className="text-[11px] sm:text-xs font-medium text-slate-600 group-hover:text-[#071B49] transition-colors truncate">
-                              Upload ID / Aadhaar
-                            </span>
-                          </div>
-                          <UploadCloud className="w-3.5 h-3.5 text-[#146EF5] shrink-0" />
-                        </div>
-                      )}
-                      <input
-                        ref={idCardInputRef}
-                        type="file"
-                        accept=".pdf,.jpg,.jpeg,.png"
-                        className="hidden"
-                        onChange={(e) => {
-                          if (e.target.files && e.target.files[0]) {
-                            processFileUpload(e.target.files[0], setIdCardFile, 'Identity Proof', 5);
-                          }
-                        }}
-                      />
-                    </div>
-
-                    {/* Doc 3: Training / Academic Certificate */}
-                    <div>
-                      {certFile ? (
-                        <div className="relative flex items-center justify-between h-[38px] sm:h-[40px] bg-purple-50/70 border border-purple-500 rounded-[6px] px-3">
-                          <div className="flex items-center gap-1.5 min-w-0 flex-1 pr-1">
-                            <FileCheck className="w-3.5 h-3.5 text-purple-600 shrink-0" />
-                            <div className="truncate">
-                              <span className="text-[11px] font-bold text-slate-900 block truncate">{certFile.name}</span>
-                              <span className="text-[9px] text-slate-500 font-medium">{formatFileSize(certFile.size)}</span>
-                            </div>
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => setCertFile(null)}
-                            className="w-5 h-5 rounded-full bg-white hover:bg-red-50 text-slate-400 hover:text-red-500 flex items-center justify-center transition-colors cursor-pointer border border-slate-200 shrink-0"
-                            title="Remove file"
-                          >
-                            <X className="w-2.5 h-2.5" />
-                          </button>
-                        </div>
-                      ) : (
-                        <div
-                          onClick={() => certInputRef.current?.click()}
-                          className="relative flex items-center justify-between h-[38px] sm:h-[40px] bg-white border border-[#E2E8F0] hover:border-[#146EF5] rounded-[6px] px-3 cursor-pointer transition-all hover:bg-blue-50/20 group"
-                        >
-                          <div className="flex items-center gap-1.5 truncate pr-1">
-                            <FileCheck className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#146EF5] transition-colors shrink-0" />
-                            <span className="text-[11px] sm:text-xs font-medium text-slate-600 group-hover:text-[#071B49] transition-colors truncate">
-                              Summer Internship Cert
-                            </span>
-                          </div>
-                          <UploadCloud className="w-3.5 h-3.5 text-[#146EF5] shrink-0" />
-                        </div>
-                      )}
-                      <input
-                        ref={certInputRef}
-                        type="file"
-                        accept=".pdf,.jpg,.jpeg,.png"
-                        className="hidden"
-                        onChange={(e) => {
-                          if (e.target.files && e.target.files[0]) {
-                            processFileUpload(e.target.files[0], setCertFile, 'Certificate', 5);
-                          }
-                        }}
-                      />
-                    </div>
-
-                  </div>
-                </div>
 
                 {/* =====================================================================
                     SUBMISSION CTA AREA (#FF2B2B RED CTA BUTTON)

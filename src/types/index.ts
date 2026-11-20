@@ -311,6 +311,7 @@ export interface StudentRegistration {
   college: string;
   duration?: string;
   passingYear: string;
+  endDate?: string;
   email?: string;
   phone?: string;
   course?: string;

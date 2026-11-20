@@ -25,6 +25,7 @@ import { CareerView } from './views/CareerView';
 import { ServicesView } from './views/ServicesView';
 import { LoginView } from './views/LoginView';
 import { AdmissionFormView } from './views/AdmissionFormView';
+import { PlacementFormView } from './views/PlacementFormView';
 
 const AppContent: React.FC = () => {
   const { currentView } = useApp();
@@ -89,6 +90,9 @@ const AppContent: React.FC = () => {
       case 'admission-form':
       case 'admission':
         return <AdmissionFormView />;
+      case 'placement-form':
+      case 'placement':
+        return <PlacementFormView />;
       default:
         return <HomeView />;
     }

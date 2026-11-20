@@ -78,7 +78,8 @@
 }
 
 /* Hide native black calendar picker icon so only the custom blue calendar icon is visible */
-#reg-passing-year::-webkit-calendar-picker-indicator {
+#reg-passing-year::-webkit-calendar-picker-indicator,
+#reg-end-date::-webkit-calendar-picker-indicator {
   opacity: 0;
   cursor: pointer;
   position: absolute;
