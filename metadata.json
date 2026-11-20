@@ -1,0 +1,6 @@
+{
+  "name": "A2Z",
+  "description": "Comprehensive EdTech, internship marketplace, and student career launch platform featuring multi-role dashboards, LMS course learning, project portfolios, verified certificates, and employer hiring pipelines.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

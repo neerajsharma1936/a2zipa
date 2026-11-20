@@ -1,0 +1,147 @@
+@import "tailwindcss";
+
+@theme {
+  --color-blue-50: #F0F7FF;
+  --color-blue-100: #E0EFFF;
+  --color-blue-200: #BAE0FD;
+  --color-blue-300: #7CC4FA;
+  --color-blue-400: #38A3F6;
+  --color-blue-500: #0077D4;
+  --color-blue-600: #004B87;
+  --color-blue-700: #003B6D;
+  --color-blue-800: #002D54;
+  --color-blue-900: #001F3B;
+  --color-blue-950: #001326;
+
+  --color-azure-50: #F0F7FF;
+  --color-azure-100: #E0EFFF;
+  --color-azure-200: #BAE0FD;
+  --color-azure-300: #7CC4FA;
+  --color-azure-400: #38A3F6;
+  --color-azure-500: #0077D4;
+  --color-azure-600: #004B87;
+  --color-azure-700: #003B6D;
+  --color-azure-800: #002D54;
+  --color-azure-900: #001F3B;
+  --color-azure-950: #001326;
+}
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: #071B49;
+    background-color: #F5F9FF;
+  }
+}
+
+.font-serif-display {
+  font-family: 'Cinzel', serif;
+}
+
+/* Custom neat scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+@media print {
+  .no-print, header, nav, footer, aside, .role-switcher-bar, #role-switcher-bar {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  body {
+    background: #ffffff !important;
+    color: #071A3D !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  #registration-receipt-container {
+    box-shadow: none !important;
+    border: 1px solid #cbd5e1 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* Hide native black calendar picker icon so only the custom blue calendar icon is visible */
+#reg-passing-year::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  width: 2.25rem;
+  height: 100%;
+}
+
+/* Ensure browser autofill matches the light-blue input background uniformly without white borders or patches */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #F0F7FF inset !important;
+  -webkit-text-fill-color: #071B49 !important;
+  box-shadow: 0 0 0 1000px #F0F7FF inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+  background-color: #F0F7FF !important;
+}
+
+/* Ensure inputs are completely transparent so parent wrapper background covers edge-to-edge */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"] {
+  background-color: transparent !important;
+}
+
+/* True Continuous Seamless Conveyor Belt Animation (Low Speed & Ultra-Smooth) */
+@keyframes conveyor-belt {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-conveyor-belt {
+  display: flex;
+  width: max-content;
+  animation: conveyor-belt 85s linear infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translate3d(0, 0, 0);
+}
+
+.animate-conveyor-belt:hover {
+  animation-play-state: paused;
+}
+
+
+
+
+
+
+
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
